@@ -8,13 +8,13 @@ def IPS():
     pktTiming = dict()
 
     evaluate = True
-    while (evaluate):
+    while evaluate:
 
         print("\nq to exit")
-        fileTouse = input("Input a .pcap file for us to evalutate: ")
+        fileTouse = input("Input a .pcap file for us to evaluate: ")
 
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 print("hello")
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
@@ -24,18 +24,18 @@ def IPS():
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        print("Working on "+ fileTouse+"...")
+        print("Working on " + fileTouse + "...")
 
         pcapSum = PrettyTable(["Source IP", "Average Interpacket Spacing"])
         firstTS = float(0)
         for packet in capture:
             try:
                 stamp = str(packet.sniff_time).split(" ")[1].split(":")
-                hTs = float(stamp[0])*3600
-                mTs = float(stamp[1])*60
+                hTs = float(stamp[0]) * 3600
+                mTs = float(stamp[1]) * 60
                 s = float(stamp[2])
                 absTime = hTs + mTs + s
 
@@ -43,9 +43,9 @@ def IPS():
                     firstTS = absTime
                 else:
                     absTime = absTime - firstTS
-                src = packet.ip.src 
-                
-                if not src in pktTiming:
+                src = packet.ip.src
+
+                if src not in pktTiming:
                     # tLastPkt, time between, numPkts
                     if absTime > 1000:
                         pktTiming[src] = [0, 0, 1]
@@ -56,14 +56,13 @@ def IPS():
                     pktTiming[src][1] += absTime - pktTiming[src][0]
                     pktTiming[src][0] = absTime
                     pktTiming[src][2] += 1
-                    
+
             except AttributeError as e:
                 pass
         for x in pktTiming.keys():
             try:
-                pcapSum.add_row([str(x), str(float(pktTiming[x][1] / (pktTiming[x][2]-1)))])
+                pcapSum.add_row([str(x), str(float(pktTiming[x][1] / (pktTiming[x][2] - 1)))])
             except ZeroDivisionError as e:
                 pcapSum.add_row([str(x), "Single Packet!"])
         print(pcapSum)
     return
-

@@ -9,16 +9,16 @@ import ipaddress
 
 def ipAccAtt():
     print("Welcome to the Source IP Access Attempts Module!")
-    prtAttempts = dict()
+    prtAttempts = dict()  # not used
 
     evaluate = True
-    while (evaluate):
+    while evaluate:
 
         print("\nq to exit")
-        fileTouse = input("Input a .pcap file for us to evalutate: ")
+        fileTouse = input("Input a .pcap file for us to evaluate: ")
 
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
             else:
@@ -27,20 +27,20 @@ def ipAccAtt():
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        print("Working on "+ fileTouse+"...")
+        print("Working on " + fileTouse + "...")
 
         pcapSum = PrettyTable(["Source IP", "Average Number of Destination IP's"])
-        firstTS = float(0)
+        firstTS = float(0)  # not used
         PAtotals = {}
         for packet in capture:
             try:
-                #get source, get dest, get port, if all distinct add to list
-                sa= packet.ip.src
+                # get source, get dest, get port, if all distinct add to list
+                sa = packet.ip.src
                 da = packet.ip.dst
-                
+
                 if sa in PAtotals:
                     if da not in PAtotals[sa]:
                         PAtotals[sa].append(da)
@@ -52,22 +52,21 @@ def ipAccAtt():
         for x in PAtotals.keys():
             pcapSum.add_row([str(x), str(len(PAtotals[x]))])
         print(pcapSum)
-        
+
         learner = Learner()
         train_learner(learner)
         test_learner(learner)
     return
 
 
-
 def train_learner(learner):
     X_vals = []
-    Y_vals = [] 
+    Y_vals = []
     evaluate = True
-    while (evaluate):
+    while evaluate:
         fileTouse = "benign_train2.pcap"
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
             else:
@@ -75,20 +74,19 @@ def train_learner(learner):
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        
-        firstTS = float(0)
+        firstTS = float(0)  # not used
         PAtotals = {}
         i = 0
         for packet in capture:
             i += 1
             try:
-                #get source, get dest, get port, if all distinct add to list
-                sa= packet.ip.src
+                # get source, get dest, get port, if all distinct add to list
+                sa = packet.ip.src
                 da = packet.ip.dst
-                
+
                 if sa in PAtotals:
                     if da not in PAtotals[sa]:
                         PAtotals[sa].append(da)
@@ -104,12 +102,11 @@ def train_learner(learner):
             Y_vals.append('benign')
         break
 
-        
     evaluate = True
-    while (evaluate):
+    while evaluate:
         fileTouse = "malicious_train.pcap"
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
             else:
@@ -117,20 +114,20 @@ def train_learner(learner):
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
         print('here')
-        firstTS = float(0)
+        firstTS = float(0)  # not used
         PAtotals = {}
         i = 0
         for packet in capture:
             i += 1
             try:
-                #get source, get dest, get port, if all distinct add to list
-                sa= packet.ip.src
+                # get source, get dest, get port, if all distinct add to list
+                sa = packet.ip.src
                 da = packet.ip.dst
-                
+
                 if sa in PAtotals:
                     if da not in PAtotals[sa]:
                         PAtotals[sa].append(da)
@@ -145,23 +142,20 @@ def train_learner(learner):
         for x in PAtotals.keys():
             X_vals.append([int(ipaddress.ip_address(str(x))), int(len(PAtotals[x]))])
             Y_vals.append('malicious')
-        
 
-        
         break
 
-
-    
     learner.train(X_vals, Y_vals)
+
 
 def test_learner(learner):
     X_vals = []
     Y_vals = []
     evaluate = True
-    while (evaluate):
+    while evaluate:
         fileTouse = "testing.pcap"
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
             else:
@@ -169,20 +163,19 @@ def test_learner(learner):
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        
         firstTS = float(0)
         PAtotals = {}
         i = 0
         for packet in capture:
             i += 1
             try:
-                #get source, get dest, get port, if all distinct add to list
-                sa= packet.ip.src
+                # get source, get dest, get port, if all distinct add to list
+                sa = packet.ip.src
                 da = packet.ip.dst
-                
+
                 if sa in PAtotals:
                     if da not in PAtotals[sa]:
                         PAtotals[sa].append(da)
@@ -200,9 +193,4 @@ def test_learner(learner):
             Y_vals.append('benign')
         break
 
-
-    
-    
     learner.test(X_vals, Y_vals)
-
-

@@ -7,9 +7,9 @@ from PAA import *
 from timing import *
 from IPAA import *
 
-#pip3 install PrettyTable
-#pip3 install pyshark
 
+# pip3 install PrettyTable
+# pip3 install pyshark
 
 
 class Record:
@@ -22,34 +22,40 @@ class Record:
         self.name = str(name)
 
     def __str__(self):
-        return (self.name+" | "+self.module1+" | "+self.module2+" | "+self.module3+" | "+self.module4+" | "+self.probability)
+        return self.name + " | " \
+               + self.module1 + " | " \
+               + self.module2 + " | " \
+               + self.module3 + " | " \
+               + self.module4 + " | " \
+               + self.probability
+
+
 # 4 more modules to branch off from this file
 
 
-#list of dictionaries used to catalog
-#the list of unique IP's and their corresponding ports
-#they tried to access as well as overall bytes sent from that IP
+# list of dictionaries used to catalog
+# the list of unique IP's and their corresponding ports
+# they tried to access as well as overall bytes sent from that IP
 
 # 4 more modules to branch off from this file
 
 
-
-#colors used for initial Table Formating
+# colors used for initial Table Formatting
 R = "\033[0;91m"
 G = "\033[0;92m"
 Y = "\033[0;93m"
 B = "\033[0;94m"
-N = "\033[0m" #put after each color set
+N = "\033[0m"  # put after each color set
+
 
 def runTest():
-
     print("Are there any particular features you want to analyze?")
-    print(Y+"1"+N+": Standard deviation of interpacketspacing")
-    print(Y+"2"+N+": Byte volume per port")
-    print(Y+"3"+N+": Port access attempts from origin IP address")
-    print(Y+"4"+N+": Destination IP attempts from origin IP address")
-    print(Y+"5"+N+": General analysis")
-    choice = input(Y+"1"+N+","+ Y+" 2"+N+","+Y+" 3"+N+","+Y+" 4"+N+": " + " 5"+N+": ")
+    print(Y + "1" + N + ": Standard deviation of interpacketspacing")
+    print(Y + "2" + N + ": Byte volume per port")
+    print(Y + "3" + N + ": Port access attempts from origin IP address")
+    print(Y + "4" + N + ": Destination IP attempts from origin IP address")
+    print(Y + "5" + N + ": General analysis")
+    choice = input(Y + "1" + N + "," + Y + " 2" + N + "," + Y + " 3" + N + "," + Y + " 4" + N + ": " + " 5" + N + ": ")
 
     # standard deviation of interpacketspacing
     if choice == "1":
@@ -65,7 +71,7 @@ def runTest():
 
     elif choice == "4":
         ipAccAtt()
-    
+
     elif choice == "5":
         generalAnalytics()
 
@@ -74,20 +80,20 @@ def runTest():
 
 
 def generalAnalytics():
-    #list of dictionaries used to catalog
-    #the list of unique IP's and their corresponding ports
-    #they tried to access as well as overall bytes sent from that IP
+    # list of dictionaries used to catalog
+    # the list of unique IP's and their corresponding ports
+    # they tried to access as well as overall bytes sent from that IP
     ipData = []
 
     evaluate = True
-    while (evaluate):
-        #here we will allow live captures
+    while evaluate:
+        # here we will allow live captures
 
         print("\nq to exit")
         fileTouse = input("Input a .pcap file (type 'live' to capture/analyze packets): ")
 
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 print("hello")
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
@@ -97,32 +103,31 @@ def generalAnalytics():
         except FileNotFoundError:
             if fileTouse == "q":
                 exit()
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        print("Working on "+ fileTouse+"...")
+        print("Working on " + fileTouse + "...")
 
-
-        #1st table seen, the overall pcap summary Table
-        #currently shows example of how threatening packets could be reported based off
-        #of numerical data we deem hostile
+        # 1st table seen, the overall pcap summary Table
+        # currently shows example of how threatening packets could be reported based off
+        # of numerical data we deem hostile
         pcapSum = PrettyTable(["Packet #", "Source IP", "Destination IP",
-        "SRC_Port", "DST_Port", "Length", "Threat"])
+                               "SRC_Port", "DST_Port", "Length", "Threat"])
 
-        #blacklist IP
+        # blacklist IP
         blacklist = []
-        bl = open("bl.txt","r")
+        bl = open("bl.txt", "r")
         for line in bl:
             blacklist.append(line.strip())
         packetsTotal = 1
 
-        #the static capture on 'test.pcap'
-        #for loop to iterate through all packets seen
+        # the static capture on 'test.pcap'
+        # for loop to iterate through all packets seen
         for packet in capture:
-            #used try to account for attribute errors in individual packets
+            # used try to account for attribute errors in individual packets
             try:
                 packetsTotal += 1
-                #parse out details from each packet
+                # parse out details from each packet
                 protocol = packet.highest_layer
                 source_address = packet.ip.src
                 source_port = packet[packet.transport_layer].srcport
@@ -130,70 +135,69 @@ def generalAnalytics():
                 destination_port = packet[packet.transport_layer].dstport
                 length = packet.length
 
-                #checks if ipData is empty, adds 1st packet if so
+                # checks if ipData is empty, adds 1st packet if so
                 if not ipData:
-                    ipData.append({'IP' : source_address,
-                         "portsAccessed" : [destination_port],
-                         "Volume": int(length)})
-        ################################################################################
-            #not empty, checking for double IPs, or if we need to add a new one
+                    ipData.append({'IP': source_address,
+                                   "portsAccessed": [destination_port],
+                                   "Volume": int(length)})
+                ################################################################################
+                # not empty, checking for double IPs, or if we need to add a new one
                 else:
-                    #iterrate over unique IP data lsit so far
+                    # iterrate over unique IP data lsit so far
                     for i in range(len(ipData)):
 
-                        #checks if current IP matches any in our current analysis
+                        # checks if current IP matches any in our current analysis
                         if ipData[i]['IP'] == source_address:
-                            #add port Accessed to the already detected IP
+                            # add port Accessed to the already detected IP
                             if ipData[i]['portsAccessed'].count(destination_port) == 0:
-                               ipData[i]['portsAccessed'].append(destination_port)
+                                ipData[i]['portsAccessed'].append(destination_port)
 
-                            #add byte Volume to already detected IP
-                            ipData[i]['Volume']+=int(length)
-                        #will add number of accesses to each port in next iteration
-                        #breaks b/c we have found a match, no need to go further
+                            # add byte Volume to already detected IP
+                            ipData[i]['Volume'] += int(length)
+                            # will add number of accesses to each port in next iteration
+                            # breaks b/c we have found a match, no need to go further
                             break
 
-                        #else if no matches so far and we are at the end of our unqiue
-                        #IP data points
-                        elif i == len(ipData)-1:
-                            #add a new IP data point to the ipData
-                            ipData.append({'IP' : source_address,
-                                  "portsAccessed" : [destination_port],
-                                  "Volume": int(length)})
+                        # else if no matches so far and we are at the end of our unqiue
+                        # IP data points
+                        elif i == len(ipData) - 1:
+                            # add a new IP data point to the ipData
+                            ipData.append({'IP': source_address,
+                                           "portsAccessed": [destination_port],
+                                           "Volume": int(length)})
 
-                #here we add an IP to the blacklist
-                #(hardcoded as of now for demo purposes)
-                #if packetsTotal == 23:
+                # here we add an IP to the blacklist
+                # (hardcoded as of now for demo purposes)
+                # if packetsTotal == 23:
                 #    blacklist.append(packet.ip.src)
-                #checks future IPs on blacklist and flags them in summary (RED)
+                # checks future IPs on blacklist and flags them in summary (RED)
                 if packet.ip.src in blacklist:
-                    pcapSum.add_row([packetsTotal, R+source_address+N ,
-                    R+destination_address+N ,R+source_port+N , R+destination_port+N ,
-                    R+length+N, R+"THREAT"+N])
-                #adds to summary table (GREEN)
+                    pcapSum.add_row([packetsTotal, R + source_address + N,
+                                     R + destination_address + N, R + source_port + N, R + destination_port + N,
+                                     R + length + N, R + "THREAT" + N])
+                # adds to summary table (GREEN)
                 else:
-                    pcapSum.add_row([packetsTotal, source_address , destination_address ,
-                    source_port , destination_port , length, G+"PASS"+N])
+                    pcapSum.add_row([packetsTotal, source_address, destination_address,
+                                     source_port, destination_port, length, G + "PASS" + N])
 
             except AttributeError as e:
                 pass
 
-        #prints summary table w/ THREAT & PASS values (hardcoded)
+        # prints summary table w/ THREAT & PASS values (hardcoded)
         print("The following is pcapsum:\n")
 
         print(pcapSum)
-        #creates numerical analysis table to input into ML model, eventually
-        #outputting some heuristic for how well we could determine the numerical ipData
-        #represents a threat
-        ipStats = PrettyTable(["IP" , "Ports Accessed", "Byte Volume"])
-        #populate table with ipData
+        # creates numerical analysis table to input into ML model, eventually
+        # outputting some heuristic for how well we could determine the numerical ipData
+        # represents a threat
+        ipStats = PrettyTable(["IP", "Ports Accessed", "Byte Volume"])
+        # populate table with ipData
         for x in ipData:
-            if(x['IP'] in blacklist):
-                ipStats.add_row([R+x['IP']+N, R+str(x['portsAccessed']), R+str(x['Volume'])+N])
+            if x['IP'] in blacklist:
+                ipStats.add_row([R + x['IP'] + N, R + str(x['portsAccessed']), R + str(x['Volume']) + N])
             else:
                 ipStats.add_row([x['IP'], x['portsAccessed'], x['Volume']])
-            #prints ipData table, shows input to ML model
-
+            # prints ipData table, shows input to ML model
 
         #######################################################################
         print("The following is ipStats: \n")
@@ -207,14 +211,13 @@ def generalAnalytics():
 
         recToAdd = Record(fileTouse, mod1, mod2, mod3, mod4, prob)
 
-
-
         runEditRecords(1, recToAdd)
         ########################################################################
-        ck = input("Do you want to run another test ("+Y+"y"+N+") or ("+Y+"n"+N+")?")
+        ck = input("Do you want to run another test (" + Y + "y" + N + ") or (" + Y + "n" + N + ")?")
         if ck == "n":
             evaluate = False
             print(Y + "Going back to main module" + N)
+
 
 def byteVolPerPort():
     learn = Learner()
@@ -223,13 +226,13 @@ def byteVolPerPort():
     portData = []
 
     evaluate = True
-    while (evaluate):
+    while evaluate:
 
         print("\nq to exit")
         fileTouse = input("Input a .pcap file for us to evalutate: ")
 
         try:
-            if(fileTouse == "live"):
+            if fileTouse == "live":
                 print("hello")
                 capture = pyshark.LiveCapture(interface='enp0s3', bpf_filter='udp port 53')
                 capture.sniff(packet_count=50)
@@ -239,10 +242,10 @@ def byteVolPerPort():
         except FileNotFoundError:
             if fileTouse == "q":
                 return
-            print(R+"That file is not found, or was input incorrectly."+N)
+            print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        print("Working on "+ fileTouse+"...")
+        print("Working on " + fileTouse + "...")
 
         pcapSum = PrettyTable(["Port", "Byte Volume"])
 
@@ -251,26 +254,26 @@ def byteVolPerPort():
                 destination_port = packet[packet.transport_layer].dstport
                 length = packet.length
 
-                #portData is empty so add the first port
+                # portData is empty so add the first port
                 if not portData:
-                    portData.append({'Destination Port' : destination_port,
-                                     'Byte Volume' : int(length)})
+                    portData.append({'Destination Port': destination_port,
+                                     'Byte Volume': int(length)})
                 # portData is not empty -> check for ports used more than once
                 else:
-                    #iterate over already used ports
+                    # iterate over already used ports
                     for i in range(len(portData)):
                         if portData[i]["Destination Port"] == destination_port:
-                            #add current packet size to port volume
+                            # add current packet size to port volume
                             portData[i]["Byte Volume"] += int(length)
 
-                            #breaks b/c we have found a match, no need to go further
+                            # breaks b/c we have found a match, no need to go further
                             break
 
-                        #else if no matches so far and we are at the end of our unqiue
-                        #port data points
-                        elif i == len(portData)-1:
-                            #add a new port data point to portData
-                            portData.append({"Destination Port" : destination_port, "Byte Volume": int(length)})
+                        # else if no matches so far and we are at the end of our unqiue
+                        # port data points
+                        elif i == len(portData) - 1:
+                            # add a new port data point to portData
+                            portData.append({"Destination Port": destination_port, "Byte Volume": int(length)})
             except AttributeError as e:
                 pass
 
@@ -280,14 +283,14 @@ def byteVolPerPort():
         print(pcapSum)
 
         print('\n\n')
-        
+
         train_learner(learn)
         test_learner(learn)
 
         X_vals = []
         for i in portData:
             vals = list(i.values())
-            x = [ int(vals[0]), vals[1] ]
+            x = [int(vals[0]), vals[1]]
             X_vals.append(x)
 
         predictions = learn.clf.predict(X_vals)
@@ -301,10 +304,8 @@ def byteVolPerPort():
         percent = (correct / count) * 100
         print("Input file predicted to have", percent, "% of malicious connections. \n")
 
-        
-
-
     return
+
 
 def train_learner(learner):
     f = open('training-data.txt', 'r')
@@ -323,10 +324,9 @@ def train_learner(learner):
             x.append(int(line[1]))
         X_vals.append(x)
         Y_vals.append(line[2].lower())
-    
-    
-    
+
     learner.train(X_vals, Y_vals)
+
 
 def test_learner(learner):
     f = open('testing.txt', 'r')
@@ -345,8 +345,5 @@ def test_learner(learner):
             x.append(int(line[1]))
         X_vals.append(x)
         Y_vals.append(line[2].lower())
-    
-    
+
     learner.test(X_vals, Y_vals)
-
-
