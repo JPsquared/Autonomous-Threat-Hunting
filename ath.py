@@ -22,16 +22,19 @@ Y = "\033[93m"
 B = "\033[0;34;40m"
 N = "\033[0m"
 C = "\033[1;96m"
+M = "\033[35m"
 YB = "\033[1;33m"
 # put after each color set
 
 intro = pyfiglet.figlet_format("ATH", font="slant")
 print("\n" + BR + intro + N + "\n")
-print("Welcome to Autonomous Threat Hunting! \nCreated by")
+print("Welcome to Autonomous Threat Hunting! \n"
+      "Created by")
 print("\tEthan Dupre (" + C + "The Rogue" + N + ")")
-print("\tBrody Jenkins (" + BR + "The Barbarian " + N + ")")
-print("\tSean Bowman (" + YB + "The Bard" + N + ") \n\t" +
-      "Matt Ransom (" + G + "The Ranger" + N + ")\n")
+print("\tBrody Jenkins (" + BR + "The Barbarian" + N + ")")
+print("\tSean Bowman (" + YB + "The Bard" + N + ")")
+print("\tMatt Ransom (" + G + "The Ranger" + N + ")")
+print("\tJP Post (" + M + "The Wizard" + N + ")")
 
 start = True
 
