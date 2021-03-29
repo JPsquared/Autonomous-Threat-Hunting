@@ -1,8 +1,45 @@
 # Autonomous-Threat-Hunting
 
-## USNA Capstone 2021
+The goal of this software is to detect threats within captured pcap files. The software can be loaded onto a host to 
+perform these functions on medium to small sized pcap files for analysis. An administrator can view the records of 
+tests, recognize blacklisted IP’s that have previously been identified, and edit records, targeted IP’s, as well as 
+modify administrator access.
 
-#### To Run:
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing 
+purposes. See deployment for notes on how to deploy the project on a live system.
+
+### Prerequisites
+
+Following is a list of prerequisite libraries employed in the project:
+
+* `sklearn`
+* `numpy`
+* `pyshark`
+* `prettytable`
+* `pyfiglet`
+
+To install these libraries onto your machine, we recommend using pip3. For example, the command:
+
+```
+pip3 install sklearn
+```
+
+Will install the sklearn library to your machine and no further action is required to complete installation.
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running
+
+#### Get Code
+
+Obtain a copy of all code contained here either by cloning this repository to your machine or by downloading a 
+compressed folder containing all project files and placing it where you would like the code to run.
+
+#### Run the Program
+
+To run 
 
 ```python3 ath.py```
 
@@ -19,40 +56,31 @@ INITIAL PASSWORD: 2021
 
 Once access has been gained, you can view/edit, records, admins, and the IP blacklist.
 
-#### File Descriptions
+## Authors
 
-##### System Admin Files
+* **Sean Bowman** - Group Leader
+* **Matt Ransom**
+* **Ethan Dupre**
+* **Brody Jenkins**
+* **John Paul Post**
 
-`viewRec.py `- allows user to records of tests
+## File Descriptions
 
-`editRec.py` - editing records
+### System Admin Files
 
-`viewAdmin.py` - viewing admin passwords and usernames
+* `viewRec.py `- allows user to records of tests
+* `editRec.py` - editing records
+* `viewAdmin.py` - viewing admin passwords and usernames
+* `editAdmin.py` - editing admin access
+* `viewBL.py` - viewing blacklisted IPs
+* `editBL.py` - editing blacklisted IPs
 
-`editAdmin.py` - editing admin access
+### Testing Files
 
-`viewBL.py` - viewing blacklisted IPs
+* `timing.py` - used for determining interpacket spacing of packets
+* `IPAA.py`- feature extraction for port access attempts
+* `testing.py` - used for selection of features, and general analytics
 
-`editBL.py` - editing blacklisted IPs
+### Learning Files
 
-###### Testing Files
-
-`timing.py` - used for determining interpacket spacing of packets
-
-`IPAA.py`- feature extraction for port access attempts
-
-`testing.py` - used for selection of features, and general analytics
-
-###### Learning Files
-
-`learning.py` - used to create a classifier model that will determine threatening behavior
-
-
-Outside library dependencies:
-```
-prettytable
-pyshark
-pyfiglet
-sklearn
-numpy
-```
+* `learning.py` - used to create a classifier model that will determine threatening behavior
