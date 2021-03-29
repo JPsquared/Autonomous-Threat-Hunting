@@ -30,7 +30,7 @@ Will install the sklearn library to your machine. No further action is required 
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+A step by step series of examples that tell you how to get a copy of the project running on your machine.
 
 #### Get Code
 
@@ -53,8 +53,8 @@ order to determine how you want to test.
 
 You can also choose system admin. You will need to input a username and password.
 
-- INITIAL USERNAME: USNA
-- INITIAL PASSWORD: 2021
+* INITIAL USERNAME: USNA
+* INITIAL PASSWORD: 2021
 
 Once access has been gained, you can view/edit, records, admins, and the IP blacklist.
 
