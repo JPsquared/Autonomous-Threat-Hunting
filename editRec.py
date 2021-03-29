@@ -35,8 +35,8 @@ def runEditRecords(ec, recToAdd):
             count += 1
 
     # give option to manually remove, but not add
-    # c= input("Editing, add "+Y+"(1)"+N+" or remove "+Y+"(2)"+N+": ")
-    #################### adding ip ############################
+    # c = input("Editing, add " + Y + "(1)" + N + " or remove " + Y + "(2)" + N + ": ")
+    # ################### adding ip ############################
     if ec == 1 and recToAdd is not None:
 
         curtime = str(datetime.datetime.now())
@@ -49,13 +49,13 @@ def runEditRecords(ec, recToAdd):
         rec.write("\n")
         rec.close()
         print("Added record to rec.txt!")
-        ######################## removing ip #################
+        # ####################### removing ip #################
     elif ec == 2 and recToAdd is None:
         runViewRecords()
         if count == 0:
             print("Nothing to remove")
             return
-        remrec = input("remove which record? (Choose a number 1 - " + str(count) + "): ")  # get length)
+        remrec = input("remove which record? (Choose a number 1 - " + str(count) + "): ")  # get length
         try:
             if int(remrec) > count:
                 print("Out of bounds, going back to options")

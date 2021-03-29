@@ -100,6 +100,7 @@ def generalAnalytics():
             else:
                 capture = pyshark.FileCapture(fileTouse)
                 print("Got it!")
+
         except FileNotFoundError:
             if fileTouse == "q":
                 exit()
@@ -140,7 +141,7 @@ def generalAnalytics():
                     ipData.append({'IP': source_address,
                                    "portsAccessed": [destination_port],
                                    "Volume": int(length)})
-                ################################################################################
+                # ###############################################################################
                 # not empty, checking for double IPs, or if we need to add a new one
                 else:
                     # iterrate over unique IP data lsit so far
@@ -180,7 +181,7 @@ def generalAnalytics():
                     pcapSum.add_row([packetsTotal, source_address, destination_address,
                                      source_port, destination_port, length, G + "PASS" + N])
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
 
         # prints summary table w/ THREAT & PASS values (hardcoded)
@@ -199,7 +200,7 @@ def generalAnalytics():
                 ipStats.add_row([x['IP'], x['portsAccessed'], x['Volume']])
             # prints ipData table, shows input to ML model
 
-        #######################################################################
+        # ######################################################################
         print("The following is ipStats: \n")
         print(ipStats)
         print("\n")
@@ -212,7 +213,7 @@ def generalAnalytics():
         recToAdd = Record(fileTouse, mod1, mod2, mod3, mod4, prob)
 
         runEditRecords(1, recToAdd)
-        ########################################################################
+        # #######################################################################
         ck = input("Do you want to run another test (" + Y + "y" + N + ") or (" + Y + "n" + N + ")?")
         if ck == "n":
             evaluate = False
@@ -239,6 +240,7 @@ def byteVolPerPort():
             else:
                 capture = pyshark.FileCapture(fileTouse)
                 print("Got it!")
+
         except FileNotFoundError:
             if fileTouse == "q":
                 return
@@ -274,7 +276,8 @@ def byteVolPerPort():
                         elif i == len(portData) - 1:
                             # add a new port data point to portData
                             portData.append({"Destination Port": destination_port, "Byte Volume": int(length)})
-            except AttributeError as e:
+
+            except AttributeError:
                 pass
 
         for x in portData:

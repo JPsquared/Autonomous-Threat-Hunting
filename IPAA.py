@@ -9,7 +9,7 @@ import ipaddress
 
 def ipAccAtt():
     print("Welcome to the Source IP Access Attempts Module!")
-    prtAttempts = dict()  # not used
+    prtAttempts = dict()  # not used?
 
     evaluate = True
     while evaluate:
@@ -33,7 +33,7 @@ def ipAccAtt():
         print("Working on " + fileTouse + "...")
 
         pcapSum = PrettyTable(["Source IP", "Average Number of Destination IP's"])
-        firstTS = float(0)  # not used
+        firstTS = float(0)  # not used?
         PAtotals = {}
         for packet in capture:
             try:
@@ -49,13 +49,16 @@ def ipAccAtt():
 
             except AttributeError as e:
                 pass
+
         for x in PAtotals.keys():
             pcapSum.add_row([str(x), str(len(PAtotals[x]))])
+
         print(pcapSum)
 
         learner = Learner()
         train_learner(learner)
         test_learner(learner)
+
     return
 
 
@@ -71,6 +74,7 @@ def train_learner(learner):
                 capture.sniff(packet_count=50)
             else:
                 capture = pyshark.FileCapture(fileTouse)
+
         except FileNotFoundError:
             if fileTouse == "q":
                 return
@@ -93,13 +97,16 @@ def train_learner(learner):
                 else:
                     PAtotals[sa] = []
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
+
             if i > 5000:
                 break
+
         for x in PAtotals.keys():
             X_vals.append([int(ipaddress.ip_address(str(x))), int(len(PAtotals[x]))])
             Y_vals.append('benign')
+
         break
 
     evaluate = True
@@ -118,7 +125,7 @@ def train_learner(learner):
             continue
 
         print('here')
-        firstTS = float(0)  # not used
+        firstTS = float(0)  # not used?
         PAtotals = {}
         i = 0
         for packet in capture:
@@ -134,11 +141,12 @@ def train_learner(learner):
                 else:
                     PAtotals[sa] = []
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
 
             if i > 5000:
                 break
+
         for x in PAtotals.keys():
             X_vals.append([int(ipaddress.ip_address(str(x))), int(len(PAtotals[x]))])
             Y_vals.append('malicious')
@@ -166,7 +174,7 @@ def test_learner(learner):
             print(R + "That file is not found, or was input incorrectly." + N)
             continue
 
-        firstTS = float(0)
+        firstTS = float(0)  # not used?
         PAtotals = {}
         i = 0
         for packet in capture:
@@ -182,7 +190,7 @@ def test_learner(learner):
                 else:
                     PAtotals[sa] = []
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
 
             if i > 5000:
@@ -191,6 +199,7 @@ def test_learner(learner):
         for x in PAtotals.keys():
             X_vals.append([int(ipaddress.ip_address(str(x))), int(len(PAtotals[x]))])
             Y_vals.append('benign')
+
         break
 
     learner.test(X_vals, Y_vals)

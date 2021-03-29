@@ -21,6 +21,7 @@ def IPS():
             else:
                 capture = pyshark.FileCapture(fileTouse)
                 print("Got it!")
+
         except FileNotFoundError:
             if fileTouse == "q":
                 return
@@ -43,6 +44,7 @@ def IPS():
                     firstTS = absTime
                 else:
                     absTime = absTime - firstTS
+
                 src = packet.ip.src
 
                 if src not in pktTiming:
@@ -57,12 +59,15 @@ def IPS():
                     pktTiming[src][0] = absTime
                     pktTiming[src][2] += 1
 
-            except AttributeError as e:
+            except AttributeError:
                 pass
+
         for x in pktTiming.keys():
             try:
                 pcapSum.add_row([str(x), str(float(pktTiming[x][1] / (pktTiming[x][2] - 1)))])
             except ZeroDivisionError as e:
                 pcapSum.add_row([str(x), "Single Packet!"])
+
         print(pcapSum)
+
     return
