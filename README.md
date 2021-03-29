@@ -1,6 +1,6 @@
 # Autonomous-Threat-Hunting
 
-USNA Capstone 2021
+##USNA Capstone 2021
 
 ### To Run:
 
@@ -19,21 +19,30 @@ INITIAL PASSWORD: 2021
 
 Once access has been gained, you can view/edit, records, admins, and the IP blacklist.
 
-System Admin Files:
+###### System Admin Files:
 
 `viewRec.py `- allows user to records of tests
+
 `editRec.py` - editing records
+
 `viewAdmin.py` - viewing admin passwords and usernames
+
 `editAdmin.py` - editing admin access
+
 `viewBL.py` - viewing blacklisted IPs
+
 `editBL.py` - editing blacklisted IPs
 
-Testing Files:
+###### Testing Files:
+
 `timing.py` - used for determining interpacket spacing of packets
+
 `IPAA.py`- feature extraction for port access attempts
+
 `testing.py` - used for selection of features, and general analytics
 
-Learning Files:
+###### Learning Files:
+
 `learning.py` - used to create a classifier model that will determine threatening behavior
 
 
