@@ -50,14 +50,18 @@ N = "\033[0m"  # put after each color set
 
 def runTest():
     print("Are there any particular features you want to analyze?")
-    print(Y + "1" + N + ": Standard deviation of interpacketspacing")
+    print(Y + "1" + N + ": Standard deviation of interpacket spacing")
     print(Y + "2" + N + ": Byte volume per port")
     print(Y + "3" + N + ": Port access attempts from origin IP address")
     print(Y + "4" + N + ": Destination IP attempts from origin IP address")
     print(Y + "5" + N + ": General analysis")
-    choice = input(Y + "1" + N + "," + Y + " 2" + N + "," + Y + " 3" + N + "," + Y + " 4" + N + ": " + " 5" + N + ": ")
+    choice = input(Y + "1" + N + ","
+                   + Y + " 2" + N + ","
+                   + Y + " 3" + N + ","
+                   + Y + " 4" + N + ","
+                   + Y + " 5" + N + ": ")
 
-    # standard deviation of interpacketspacing
+    # standard deviation of interpacket spacing
     if choice == "1":
         IPS()
 
