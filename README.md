@@ -2,4 +2,11 @@
 
 USNA Capstone 2021
 
-Install ```prettytable``` and ```pyshark```
+Outside library dependencies:
+```
+prettytable
+pyshark
+pyfiglet
+sklearn
+numpy
+```
