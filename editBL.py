@@ -26,7 +26,7 @@ def runEditBL():
     bl = open("bl.txt", "r+")
     print(bl.read())
     ec = input("Editing, add " + Y + "(1)" + N + " or remove " + Y + "(2)" + N + ": ")
-    #################### adding ip ############################
+    # ################### adding ip ############################
     if ec == "1":
         addip = input("IP to add (Format \"123.45.678.910\"): ")
 
@@ -34,7 +34,7 @@ def runEditBL():
         bl.write("\n")
         bl.close()
         print("Added " + addip + "!")
-        ######################## removing ip #################
+        # ####################### removing ip #################
     elif ec == "2":
         remip = input("remove which IP? (Format \"123.45.678.910\"): ")
         with open("bl.txt", "r") as bl:

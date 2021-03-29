@@ -26,12 +26,12 @@ N = "\033[0m"  # put after each color set
 def runEditAdmin():
     runViewAdmin()
     ec = input("Editing, add " + Y + "(1)" + N + " or remove " + Y + "(2)" + N + ": ")
-    #################### adding ip ############################
+    # ################### adding ip ############################
     if ec == "1":
         ad = open("admin.txt", "r+")
         x = ad.read()
         print(x)
-        if x is not "":
+        if x != "":
             ad.write("\n")
 
         adduser = input("Username to add: ")
@@ -46,7 +46,7 @@ def runEditAdmin():
         ad.write("\n")
         ad.close()
         print("Added the user " + adduser + "!")
-        ######################## removing ip #################
+        # ####################### removing ip #################
     elif ec == "2":
         remuser = input("Remove which user: ")
         with open("admin.txt", "r") as ad:
@@ -57,7 +57,6 @@ def runEditAdmin():
                 print(combos)
                 order = 0
                 while order in range(len(combos) - 1):
-
                     if combos[order] == remuser:
                         del combos[order]
                         del combos[order]
@@ -69,6 +68,7 @@ def runEditAdmin():
                         return
                     elif combos[len(combos) - 1] == "":
                         del combos[len(combos) - 1]
+
                 print(combos)
 
                 for i in range(len(combos)):

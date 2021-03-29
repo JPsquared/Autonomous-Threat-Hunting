@@ -32,7 +32,9 @@ print("\tEthan Dupre (" + C + "The Rogue" + N + ")")
 print("\tBrody Jenkins (" + BR + "The Barbarian " + N + ")")
 print("\tSean Bowman (" + YB + "The Bard" + N + ") \n\t" +
       "Matt Ransom (" + G + "The Ranger" + N + ")\n")
+
 start = True
+
 while start:
     setting = input("Enter " + Y + "1" + N + " for testing, " + Y + "2" + N +
                     " for System Administration, " + Y + "3" + N + " to exit program: ")
@@ -57,5 +59,6 @@ while start:
             print(Y + "Okay, back to the beginnning then." + N)
         else:
             print(Y + "Please input a valid option" + N)
+
     else:
         print(Y + "Please cooperate with the system and input a valid number" + N)
